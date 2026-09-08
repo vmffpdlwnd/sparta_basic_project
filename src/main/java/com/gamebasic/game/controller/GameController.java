@@ -36,11 +36,12 @@ public class GameController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-     @PutMapping("/games/{gameId}/progress")
-     public ResponseEntity<?> updateProgress(
-         @PathVariable Long gameId,
-         @Valid @RequestBody ProgressRequest request
-     ) {
-         return ResponseEntity.ok(gameService.updateProgress(gameId, request));
-     }
+    // 진행과 덱 저장
+    @PutMapping("/games/{gameId}/progress")
+    public ResponseEntity<?> updateProgress(
+        @PathVariable Long gameId,
+        @Valid @RequestBody ProgressRequest request
+    ) {
+        return ResponseEntity.ok(gameService.updateProgress(gameId, request));
+    }
 }

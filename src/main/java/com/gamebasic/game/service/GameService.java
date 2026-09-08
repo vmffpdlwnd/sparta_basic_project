@@ -86,45 +86,46 @@ public class GameService {
             deck
         );
     }
+    // 게임 목록 조회
+    @Transactional(readOnly = true)
+    public List<GameSummaryResponse> getGames() {
+       List<Game> games = gameRepository.findAll();
+       List<GameSummaryResponse> responseList = new ArrayList<>();
 
-     @Transactional(readOnly = true)
-     public List<GameSummaryResponse> getGames() {
-        List<Game> games = gameRepository.findAll();
-        List<GameSummaryResponse> responseList = new ArrayList<>();
+       for (Game game : games) {
+           responseList.add(new GameSummaryResponse(
+                   game.getId(),
+                   game.getPlayerName(),
+                   game.getCurrentHp(),
+                   game.getCurrentFloor(),
+                   game.getPhase(),
+                   game.getStatus()
+           ));
+       }
+       return responseList;
+    }
 
-        for (Game game : games) {
-            responseList.add(new GameSummaryResponse(
-                    game.getId(),
-                    game.getPlayerName(),
-                    game.getCurrentHp(),
-                    game.getCurrentFloor(),
-                    game.getPhase(),
-                    game.getStatus()
-            ));
-        }
-        return responseList;
-     }
+    //게임 상세 조회
+    @Transactional(readOnly = true)
+    public GameDetailResponse getGame(Long gameId) {
+       Game game = findGame(gameId);
+       List<RunCard> cards = runCardRepository.findAllByGameOrderByIdAsc(game);
+       List<CardResponse> deck = new ArrayList<>();
 
-     @Transactional(readOnly = true)
-     public GameDetailResponse getGame(Long gameId) {
-        Game game = findGame(gameId);
-        List<RunCard> cards = runCardRepository.findAllByGameOrderByIdAsc(game);
-        List<CardResponse> deck = new ArrayList<>();
+       for (RunCard card : cards) {
+           deck.add(new CardResponse(card.getId(),card.getCardType(), card.getAcquiredFloor()));
+       }
+       return new GameDetailResponse(
+               game.getId(),
+               game.getPlayerName(),
+               game.getCurrentHp(),
+               game.getCurrentFloor(),
+               game.getPhase(),
+               game.getStatus(),
+               deck
+       );
+    }
 
-        for (RunCard card : cards) {
-            deck.add(new CardResponse(card.getId(),card.getCardType(), card.getAcquiredFloor()));
-        }
-        return new GameDetailResponse(
-                game.getId(),
-                game.getPlayerName(),
-                game.getCurrentHp(),
-                game.getCurrentFloor(),
-                game.getPhase(),
-                game.getStatus(),
-                deck
-        );
-     }
-
-    // TODO (Lv 8): 플레이어 이름 변경 — 변경 감지로 수정
-    // TODO (Lv 8): 게임 삭제
+   // TODO (Lv 8): 플레이어 이름 변경 — 변경 감지로 수정
+   // TODO (Lv 8): 게임 삭제
 }
