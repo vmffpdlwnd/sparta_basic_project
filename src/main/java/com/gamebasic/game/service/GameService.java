@@ -1,5 +1,7 @@
 package com.gamebasic.game.service;
 
+import com.gamebasic.common.exception.GameFinishedException;
+import com.gamebasic.common.exception.GameNotFoundException;
 import com.gamebasic.game.dto.*;
 import com.gamebasic.game.entity.Game;
 import com.gamebasic.game.repository.GameRepository;
@@ -53,13 +55,13 @@ public class GameService {
 
     private Game findGame(Long gameId) {
         return gameRepository.findById(gameId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+            .orElseThrow(() -> new GameNotFoundException(gameId));
     }
 
     @Transactional
     public GameDetailResponse updateProgress(Long gameId, ProgressRequest request) {
         Game game = findGame(gameId);
-        if(game.isFinished()) { throw new ResponseStatusException(HttpStatus.CONFLICT); }//이미 종료된 게임인 경우 409 CONFLICT 응답
+        if(game.isFinished()) { throw new GameFinishedException(gameId); }//이미 종료된 게임인 경우 409 CONFLICT 응답
         game.updateProgress(
             request.getCurrentHp(),
             request.getCurrentFloor(),
