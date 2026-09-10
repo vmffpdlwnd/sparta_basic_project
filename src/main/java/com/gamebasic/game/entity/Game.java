@@ -63,6 +63,6 @@ public class Game {
     }
 
     public boolean isFinished() {
-        return status != GameStatus.PLAYING;
+        return this.status == GameStatus.CLEARED || this.status == GameStatus.FAILED;
     }
 }
