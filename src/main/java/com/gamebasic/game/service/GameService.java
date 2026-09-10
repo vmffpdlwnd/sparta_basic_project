@@ -10,10 +10,8 @@ import com.gamebasic.runcard.dto.RunCardRequest;
 import com.gamebasic.runcard.entity.RunCard;
 import com.gamebasic.runcard.repository.RunCardRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +39,9 @@ public class GameService {
             game.getCurrentFloor(),
             game.getPhase(),
             game.getStatus(),
-            deck
+            deck,
+            game.getCreatedAt(),
+            game.getUpdatedAt()
         );
     }
 
@@ -83,7 +83,9 @@ public class GameService {
             game.getCurrentFloor(),
             game.getPhase(),
             game.getStatus(),
-            deck
+            deck,
+            game.getCreatedAt(),
+            game.getUpdatedAt()
         );
     }
     // 게임 목록 조회
@@ -94,12 +96,15 @@ public class GameService {
 
         for (Game game : games) {
             responseList.add(new GameSummaryResponse(
-                   game.getId(),
-                   game.getPlayerName(),
-                   game.getCurrentHp(),
-                   game.getCurrentFloor(),
-                   game.getPhase(),
-                   game.getStatus()
+                game.getId(),
+                game.getPlayerName(),
+                game.getCurrentHp(),
+                game.getCurrentFloor(),
+                game.getPhase(),
+                game.getStatus(),
+                game.getCreatedAt(),
+                game.getUpdatedAt()
+
            ));
         }
         return responseList;
@@ -122,7 +127,9 @@ public class GameService {
                game.getCurrentFloor(),
                game.getPhase(),
                game.getStatus(),
-               deck
+               deck,
+               game.getCreatedAt(),
+               game.getUpdatedAt()
        );
     }
 

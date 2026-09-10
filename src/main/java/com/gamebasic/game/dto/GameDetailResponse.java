@@ -5,6 +5,7 @@ import com.gamebasic.game.entity.GameStatus;
 import com.gamebasic.runcard.dto.CardResponse;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,6 +17,8 @@ public class GameDetailResponse {
     private final GamePhase phase;
     private final GameStatus status;
     private final List<CardResponse> deck;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
     public GameDetailResponse(
         Long id,
@@ -24,7 +27,10 @@ public class GameDetailResponse {
         int currentFloor,
         GamePhase phase,
         GameStatus status,
-        List<CardResponse> deck
+        List<CardResponse> deck,
+        LocalDateTime createAt,
+        LocalDateTime updatedAt
+
     ) {
         this.id = id;
         this.playerName = playerName;
@@ -33,5 +39,8 @@ public class GameDetailResponse {
         this.phase = phase;
         this.status = status;
         this.deck = List.copyOf(deck);
+        this.createdAt = createAt;
+        this.updatedAt = updatedAt;
+
     }
 }
