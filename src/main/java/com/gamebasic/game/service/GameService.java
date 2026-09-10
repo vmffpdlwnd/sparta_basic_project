@@ -86,11 +86,11 @@ public class GameService {
     // 게임 목록 조회
     @Transactional(readOnly = true)
     public List<GameSummaryResponse> getGames() {
-       List<Game> games = gameRepository.findAll();
-       List<GameSummaryResponse> responseList = new ArrayList<>();
+        List<Game> games = gameRepository.findAllByOrderByIdDesc();
+        List<GameSummaryResponse> responseList = new ArrayList<>();
 
-       for (Game game : games) {
-           responseList.add(new GameSummaryResponse(
+        for (Game game : games) {
+            responseList.add(new GameSummaryResponse(
                    game.getId(),
                    game.getPlayerName(),
                    game.getCurrentHp(),
@@ -98,8 +98,8 @@ public class GameService {
                    game.getPhase(),
                    game.getStatus()
            ));
-       }
-       return responseList;
+        }
+        return responseList;
     }
 
     //게임 상세 조회
