@@ -264,36 +264,3 @@ com.gamebasic
    ├─ repository    # RunCardRepository
    └─ dto           # CardResponse, RunCardRequest
 ```
-
-## 실행 방법
-
-```bash
-# 1. Docker로 MySQL 실행 (호스트 포트 3307 사용)
-docker run --name crimson-citadel-mysql \
-  -e MYSQL_ROOT_PASSWORD=<password> \
-  -e MYSQL_DATABASE=crimsoncitadel \
-  -p 3307:3306 \
-  -d mysql:8
-```
-
-```properties
-# 2. src/main/resources/application.properties
-spring.datasource.url=jdbc:mysql://localhost:3307/crimsoncitadel?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
-spring.datasource.username=<username>
-spring.datasource.password=<password>
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.open-in-view=false
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-```
-
-```bash
-# 3. 서버 실행
-./gradlew bootRun
-```
-
-서버가 뜨면 `http://localhost:8080/` 에서 게임 화면이 동작합니다.
-
-> `application.properties`는 실제 DB 계정 정보가 포함되므로 `.gitignore`에 등록하는 것을 권장합니다.
