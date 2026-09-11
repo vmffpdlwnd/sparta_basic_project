@@ -13,8 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -92,9 +92,16 @@ public class GameService {
     @Transactional(readOnly = true)
     public List<GameSummaryResponse> getGames() {
         List<Game> games = gameRepository.findAllByOrderByIdDesc();
+
+        Map<Long, Long> deckSizeMap = games.isEmpty()
+                ? Collections.emptyMap()
+                : runCardRepository.countByGames(games).stream()
+                    .collect(Collectors.toMap(DeckCount::getGameId, DeckCount::getDeckSize));
+
         List<GameSummaryResponse> responseList = new ArrayList<>();
 
         for (Game game : games) {
+            Long deckSize = deckSizeMap.getOrDefault(game.getId(),0L);
             responseList.add(new GameSummaryResponse(
                 game.getId(),
                 game.getPlayerName(),
@@ -102,6 +109,7 @@ public class GameService {
                 game.getCurrentFloor(),
                 game.getPhase(),
                 game.getStatus(),
+                deckSize,
                 game.getCreatedAt(),
                 game.getUpdatedAt()
 
